@@ -1,0 +1,770 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Gec Daman
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+   /* Scrollbar for tables */
+    .table-scroll {
+      overflow-x: auto;
+    }
+  </style>
+ </head>
+
+ <body class="bg-gray-50 min-h-screen flex flex-col">
+  
+  
+  <div class="flex-grow flex flex-col" id="app" style="display:none;">
+   <!-- Main Page -->
+   <main class="max-w-4xl mx-auto p-6 flex flex-col items-center justify-center flex-grow" id="main-page">
+    <div class="flex justify-center items-center space-x-4 mt-20 mb-1">
+  <img src="college_logo.png" alt="College Logo" class="h-16.5 object-contain" />
+  <img src="laatlogo.jpg" alt="University Logo" class="h-16.5 object-contain" />
+</div>
+    <div class="flex items-center w-full mb-6 space-x-4">
+      
+
+  
+  <h1 class="text-3xl font-bold text-gray-800 flex-grow text-center">
+    GOVERNMENT ENGINEERING COLLEGE,DAMAN <br> <span class="text-blue-600">Smart And Real-Time Admission Seat Allocation System</span>
+  </h1>
+  
+</div>
+
+
+    <div class="flex flex-col sm:flex-row gap-6 w-full max-w-md">
+     <button class="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded shadow flex items-center justify-center gap-2" id="btn-update">
+      <i class="fas fa-edit"></i>
+      Allocate Seat
+     </button>
+     <button class="w-full sm:w-auto px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded shadow flex items-center justify-center gap-2" id="btn-view">
+      <i class="fas fa-eye"></i>
+      View Data
+     </button>
+     <button class="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded shadow flex items-center justify-center gap-2" id="btn-export">
+      <i class="fas fa-file-excel"></i>
+      Export Data
+     </button>
+    </div>
+   </main>
+   <!-- Update Data Page -->
+   <section class="hidden max-w-4xl mx-auto p-6 flex flex-col gap-6 bg-gray-200 rounded" id="update-page">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center underline underline-offset-4 decoration-blue-600">
+     Allocate Seat to Student
+    </h2>
+    <form class="flex flex-col gap-4 max-w-md mx-auto bg-white p-6 rounded shadow border border-gray-900 height-auto" id="allocate-form">
+     <label class="block">
+      <span class="text-gray-700 font-medium bg-yellow-200 px-1 rounded border border-yellow-400">
+       Select Branch
+      </span>
+      <select class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" id="branch-select" required="">
+       <option disabled="" selected="" value="">
+        -- Select Branch --
+       </option>
+       <option value="Computer Engineering">
+        Computer Engineering
+       </option>
+       <option value="Mechanical Engineering">
+        Mechanical Engineering
+       </option>
+       <option value="Electrical Engineering">
+        Electrical Engineering
+       </option>
+       <option value="Civil Engineering">
+        Civil Engineering
+       </option>
+       <option value="Bio Medical Engineering">
+        Bio Medical Engineering
+       </option>
+      </select>
+     </label>
+     <label class="block">
+      <span class="text-gray-700 font-medium bg-yellow-200 px-1 rounded border border-yellow-400">
+       Select State
+      </span>
+      <select class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" id="state-select" required="">
+       <option disabled="" selected="" value="">
+        -- Select State --
+       </option>
+       <option value="DD">
+        Daman &amp; Diu
+       </option>
+       <option value="DNH">
+        Dadra &amp; Nagar Haveli
+       </option>
+      </select>
+     </label>
+     <label class="block">
+      <span class="text-gray-700 font-medium bg-yellow-200 px-1 rounded border border-yellow-400">
+       Select Category
+      </span>
+      <select class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" id="category-select" required="">
+       <option disabled="" selected="" value="">
+        -- Select Category --
+       </option>
+       <option value="General">
+        GEN
+       </option>
+       <option value="SC">
+        SC
+       </option>
+       <option value="ST">
+        ST
+       </option>
+       <option value="OBC">
+        OBC
+       </option>
+       <option value="EWS">
+        EWS
+       </option>
+       
+      </select>
+     </label>
+     <label class="block">
+      <span class="text-gray-700 font-medium bg-yellow-200 px-1 rounded border border-yellow-400">
+       Student Name
+      </span>
+      <input class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" id="student-name" placeholder="Enter student name" required="" type="text"/>
+     </label>
+     <label class="block">
+      <span class="text-gray-700 font-medium bg-yellow-200 px-1 rounded border border-yellow-400">
+       Seat Number
+      </span>
+      <input class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" id="seat-number" placeholder="Enter seat number" required="" type="text"/>
+      <p id="seat-warning" class="mt-2 text-sm text-orange-600 hidden">Seat number appears to be already allocated.</p>
+     </label>
+     <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded font-semibold flex items-center justify-center gap-2" type="submit">
+      <i class="fas fa-check-circle"></i>
+      Allocate Seat
+     </button>
+     <button id="download-slip-btn" class="hidden w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded font-semibold flex items-center justify-center gap-2" type="button">
+      <i class="fas fa-file-pdf"></i>
+      Download Admission Slip (PDF)
+     </button>
+     <button class="w-full mt-2 bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 rounded font-semibold" id="update-back-btn" type="button">
+      Back to Main
+     </button>
+     <p aria-live="polite" class="mt-4 text-center font-semibold text-red-600" id="update-message" role="alert"></p>
+    </form>
+   </section>
+   <!-- View Data Page -->
+   <section class="hidden max-w-6xl mx-auto p-6 flex flex-col gap-6" id="view-page">
+    <div class="flex flex-col gap-6">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <img src="college_logo.png" alt="College Logo" class="h-12 object-contain" />
+          <img src="laatlogo.jpg" alt="University Logo" class="h-12 object-contain" />
+          <div>
+            <h2 class="text-2xl font-semibold text-gray-800">Government Engineering College, Daman</h2>
+            <p class="text-sm text-gray-600 underline underline-offset-4 decoration-blue-600">Seat Allocation & Counselling Dashboard</p>
+          
+
+          </div>
+        </div>
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+          <div class="relative flex-1">
+            <span class="absolute inset-y-0 left-3 flex items-center text-gray-400"><i class="fas fa-search"></i></span>
+            <input id="search-input" type="text" placeholder="Search student, branch or seat number..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          </div>
+          <button id="export-allocations-btn" class="w-full sm:w-auto px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded shadow flex items-center justify-center gap-2">
+            <i class="fas fa-file-excel"></i>
+            Export Allocation List
+          </button>
+        </div>
+      </div>
+      
+      </div>
+      <div class="text-align-center">
+      <div class="flex justify-center gap-10 mb-4">
+          
+          <h2 class="text-3xl font-semibold text-gray-800 align-center ml-500 underline underline-offset-4 decoration-blue-600">Current Seat Availability</h2>
+         </div> 
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow-lg p-4">
+          <h3 class="text-xl font-semibold text-gray-700 mb-2 text-center">Daman &amp; Diu (DD)</h3>
+        <table class="min-w-full border-collapse text-center border border-gray-900" id="seat-availability-table-dd">
+        <thead class="bg-blue-600 text-white">
+          <tr>
+          <th class="border border-gray-900 px-4 py-2 sticky left-0 bg-blue-600 z-10">Branch \ Category</th>
+          <th class="border border-gray-900 px-4 py-2">General</th>
+          <th class="border border-gray-900 px-4 py-2">SC</th>
+          <th class="border border-gray-900 px-4 py-2">ST</th>
+          <th class="border border-gray-900 px-4 py-2">OBC</th>
+          <th class="border border-gray-900 px-4 py-2">Total</th>
+          <th class="border border-gray-900 px-4 py-2">EWS</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-800" id="seat-availability-body-dd"></tbody>
+        </table>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg p-4">
+          <h3 class="text-xl font-semibold text-gray-700 mb-2 text-center">Dadra &amp; Nagar Haveli (DNH)</h3>
+          <table class="min-w-full border-collapse text-center border border-gray-900" id="seat-availability-table-dnh">
+        <thead class="bg-blue-600 text-white">
+          <tr>
+        <th class="border border-gray-900 px-4 py-2 sticky left-0 bg-blue-600 z-10">Branch \ Category</th>
+        <th class="border border-gray-900 px-4 py-2">General</th>
+        <th class="border border-gray-900 px-4 py-2">SC</th>
+        <th class="border border-gray-900 px-4 py-2">ST</th>
+        <th class="border border-gray-900 px-4 py-2">OBC</th>
+        <th class="border border-gray-900 px-4 py-2">Total</th>
+        <th class="border border-gray-900 px-4 py-2">EWS</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-800" id="seat-availability-body-dnh"></tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <div>
+        <h2 class="text-2xl font-semibold text-gray-800 mt-2 mb-4 text-center underline underline-offset-4 decoration-blue-600">Seat Allocated To Below Students</h2>
+        <div class="table-scroll border rounded shadow bg-white">
+          <table class="min-w-full border-collapse text-center" id="allocated-seats-table">
+            <thead class="bg-green-600 text-white">
+              <tr>
+                <th class="border border-green-700 px-4 py-2">Student Name</th>
+                <th class="border border-green-700 px-4 py-2">Branch</th>
+                <th class="border border-green-700 px-4 py-2">Category</th>
+                <th class="border border-green-700 px-4 py-2">Seat Number</th>
+                <th class="border border-green-700 px-4 py-2">State</th>
+                <th class="border border-green-700 px-4 py-2">Action</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-800" id="allocated-seats-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="flex justify-center">
+        <button class="w-full max-w-xs mx-auto mt-6 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 rounded font-semibold" id="view-back-btn">
+          Back to Main
+        </button>
+      </div>
+      
+    </div>
+   </section>
+  </div>
+
+  <script>
+    // Password protection with masked input
+    (function(){
+      const correctPassword = "gecdaman396210";
+      let attempts = 0;
+
+      // Create modal for password input
+      const modal = document.createElement("div");
+      modal.className = "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
+      modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg">
+          <h2 class="text-xl font-semibold mb-4 text-center">Enter Password</h2>
+          <input type="password" id="password-input" class="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password" autofocus />
+          <div class="flex justify-center space-x-4">
+            <button id="password-submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold">Submit</button>
+          </div>
+          <p id="password-error" class="text-red-600 mt-3 text-center hidden">Incorrect password. Please try again.</p>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      const input = modal.querySelector("#password-input");
+      const submitBtn = modal.querySelector("#password-submit");
+      const errorMsg = modal.querySelector("#password-error");
+
+      function checkPassword() {
+        const val = input.value;
+        if(val === correctPassword) {
+          modal.remove();
+          document.getElementById("app").style.display = "flex";
+        } else {
+          errorMsg.classList.remove("hidden");
+          input.value = "";
+          input.focus();
+        }
+      }
+
+      submitBtn.addEventListener("click", checkPassword);
+      input.addEventListener("keydown", (e) => {
+        if(e.key === "Enter") {
+          checkPassword();
+        }
+      });
+    })();
+  </script>
+
+  <script>
+   // Database connection and API endpoints
+    const API_BASE_URL = "./api";
+
+    // Endpoints
+    const ENDPOINTS = {
+      getSeats: API_BASE_URL + "/get_seats.php",
+      getAllocations: API_BASE_URL + "/get_allocations.php",
+      allocateSeat: API_BASE_URL + "/allocate_seat.php",
+      initializeSeats: API_BASE_URL + "/initialize_seats.php",
+      deleteAllocation: API_BASE_URL + "/delete_allocation.php",
+      generateSlip: API_BASE_URL + "/generate_slip.php",
+      exportAllocations: API_BASE_URL + "/export_allocations.php",
+    };
+
+    let allocationsData = [];
+    let lastAllocationId = null;
+
+    // Elements
+    const mainPage = document.getElementById("main-page");
+    const updatePage = document.getElementById("update-page");
+    const viewPage = document.getElementById("view-page");
+
+    const btnUpdate = document.getElementById("btn-update");
+    const btnView = document.getElementById("btn-view");
+    const btnExport = document.getElementById("btn-export");
+
+    const updateBackBtn = document.getElementById("update-back-btn");
+    const viewBackBtn = document.getElementById("view-back-btn");
+
+    const allocateForm = document.getElementById("allocate-form");
+    const branchSelect = document.getElementById("branch-select");
+    const categorySelect = document.getElementById("category-select");
+    const studentNameInput = document.getElementById("student-name");
+    const updateMessage = document.getElementById("update-message");
+    const stateSelect = document.getElementById("state-select");
+
+    const seatAvailabilityBodyDD = document.getElementById("seat-availability-body-dd");
+    const seatAvailabilityBodyDNH = document.getElementById("seat-availability-body-dnh");
+    const allocatedSeatsBody = document.getElementById("allocated-seats-body");
+    const searchInput = document.getElementById("search-input");
+    const exportAllocationsBtn = document.getElementById("export-allocations-btn");
+    const downloadSlipBtn = document.getElementById("download-slip-btn");
+    const seatWarning = document.getElementById("seat-warning");
+
+    // Branches and categories (for client side validation and display)
+    const BRANCHES = [
+      "Computer Engineering",
+      "Mechanical Engineering",
+      "Electrical Engineering",
+      "Civil Engineering",
+      "Bio Medical Engineering",
+    ];
+    const CATEGORIES = ["General", "SC", "ST", "OBC", "EWS"];
+
+    function getSeatCellClasses(count) {
+      const baseClasses = "border border-gray-900 px-4 py-2 font-bold";
+      if (count <= 0) return baseClasses + " bg-red-500 text-white";
+      if (count <= 2) return baseClasses + " bg-yellow-300 text-black";
+      return baseClasses + " bg-green-400 text-black";
+    }
+
+    // Show page function
+    function showPage(page) {
+      mainPage.classList.add("hidden");
+      updatePage.classList.add("hidden");
+      viewPage.classList.add("hidden");
+
+      page.classList.remove("hidden");
+    }
+
+    // Initialize seats on first load if not present in DB
+    async function initializeSeatsIfNeeded() {
+      try {
+        const res = await fetch(ENDPOINTS.getSeats);
+        if (!res.ok) throw new Error("Failed to fetch seats");
+        const data = await res.json();
+        if (data.length === 0) {
+          // Initialize seats
+          const initRes = await fetch(ENDPOINTS.initializeSeats, {
+            method: "POST",
+          });
+          if (!initRes.ok) throw new Error("Failed to initialize seats");
+        }
+      } catch (error) {
+        console.error("Error initializing seats:", error);
+      }
+    }
+
+    // Fetch and render seat availability tables for DD and DNH
+    async function loadSeatAvailability() {
+  try {
+    const res = await fetch(ENDPOINTS.getSeats);
+    if (!res.ok) throw new Error("Failed to fetch seats");
+    const seats = await res.json();
+
+    seatAvailabilityBodyDD.innerHTML = "";
+    seatAvailabilityBodyDNH.innerHTML = "";
+
+    BRANCHES.forEach((branch) => {
+      // Daman & Diu row
+      const trDD = document.createElement("tr");
+      trDD.classList.add("hover:bg-gray-100");
+
+      const branchTdDD = document.createElement("td");
+      branchTdDD.textContent = branch;
+      branchTdDD.className = "border border-blue-700 px-4 py-2 font-semibold sticky left-0 bg-white z-10 text-left";
+      trDD.appendChild(branchTdDD);
+
+      let totalDD = 0;
+      // Sum only General, SC, ST, OBC for total
+      ["General", "SC", "ST", "OBC"].forEach((category) => {
+        const seatObjDD = seats.find(
+          (s) =>
+            s.branch === branch &&
+            s.category.toLowerCase() === category.toLowerCase() &&
+            s.state === "DD"
+        );
+        const availableSeats = seatObjDD ? Number(seatObjDD.seats_available) : 0;
+        const tdDD = document.createElement("td");
+        tdDD.className = getSeatCellClasses(availableSeats);
+        tdDD.textContent = availableSeats;
+        trDD.appendChild(tdDD);
+        totalDD += availableSeats;
+      });
+
+      const totalTdDD = document.createElement("td");
+      totalTdDD.className = getSeatCellClasses(totalDD);
+      totalTdDD.textContent = totalDD;
+      trDD.appendChild(totalTdDD);
+
+      // EWS column independent, after Total
+      const ewsSeatObjDD = seats.find(
+        (s) =>
+          s.branch === branch &&
+          s.category.toLowerCase() === "ews" &&
+          s.state === "DD"
+      );
+      const ewsCountDD = ewsSeatObjDD ? Number(ewsSeatObjDD.seats_available) : 0;
+      const ewsTdDD = document.createElement("td");
+      ewsTdDD.className = getSeatCellClasses(ewsCountDD);
+      ewsTdDD.textContent = ewsCountDD;
+      trDD.appendChild(ewsTdDD);
+
+      seatAvailabilityBodyDD.appendChild(trDD);
+
+      // Dadra & Nagar Haveli row
+      const trDNH = document.createElement("tr");
+      trDNH.classList.add("hover:bg-gray-100");
+
+      const branchTdDNH = document.createElement("td");
+      branchTdDNH.textContent = branch;
+      branchTdDNH.className = "border border-blue-700 px-4 py-2 font-semibold sticky left-0 bg-white z-10 text-left";
+      trDNH.appendChild(branchTdDNH);
+
+      let totalDNH = 0;
+      ["General", "SC", "ST", "OBC"].forEach((category) => {
+        const seatObjDNH = seats.find(
+          (s) =>
+            s.branch === branch &&
+            s.category.toLowerCase() === category.toLowerCase() &&
+            s.state === "DNH"
+        );
+        const availableSeats = seatObjDNH ? Number(seatObjDNH.seats_available) : 0;
+        const tdDNH = document.createElement("td");
+        tdDNH.className = getSeatCellClasses(availableSeats);
+        tdDNH.textContent = availableSeats;
+        trDNH.appendChild(tdDNH);
+        totalDNH += availableSeats;
+      });
+
+      const totalTdDNH = document.createElement("td");
+      totalTdDNH.className = getSeatCellClasses(totalDNH);
+      totalTdDNH.textContent = totalDNH;
+      trDNH.appendChild(totalTdDNH);
+
+      const ewsSeatObjDNH = seats.find(
+        (s) =>
+          s.branch === branch &&
+          s.category.toLowerCase() === "ews" &&
+          s.state === "DNH"
+      );
+      const ewsCountDNH = ewsSeatObjDNH ? Number(ewsSeatObjDNH.seats_available) : 0;
+      const ewsTdDNH = document.createElement("td");
+      ewsTdDNH.className = getSeatCellClasses(ewsCountDNH);
+      ewsTdDNH.textContent = ewsCountDNH;
+      trDNH.appendChild(ewsTdDNH);
+
+      seatAvailabilityBodyDNH.appendChild(trDNH);
+    });
+  } catch (error) {
+    console.error("Error loading seat availability:", error);
+    seatAvailabilityBodyDD.innerHTML =
+      '<tr><td colspan="7" class="text-red-600 font-semibold py-4">Failed to load seat availability data.</td></tr>';
+    seatAvailabilityBodyDNH.innerHTML =
+      '<tr><td colspan="7" class="text-red-600 font-semibold py-4">Failed to load seat availability data.</td></tr>';
+  }
+}
+
+    function renderAllocations(filter = "") {
+      const normalized = filter.trim().toLowerCase();
+      const filtered = allocationsData.filter(({ student_name, branch, seat_number }) => {
+        if (!normalized) return true;
+        return (
+          (student_name || "").toLowerCase().includes(normalized) ||
+          (branch || "").toLowerCase().includes(normalized) ||
+          (seat_number || "").toLowerCase().includes(normalized)
+        );
+      });
+
+      allocatedSeatsBody.innerHTML = "";
+
+      if (filtered.length === 0) {
+        allocatedSeatsBody.innerHTML =
+          '<tr><td colspan="6" class="py-4 text-gray-600">No seats allocated yet.</td></tr>';
+        return;
+      }
+
+      filtered.forEach(({ id, student_name, branch, category, seat_number, state }) => {
+        const tr = document.createElement("tr");
+        tr.classList.add("hover:bg-gray-100");
+
+        tr.innerHTML = `
+<td class="border border-green-700 px-4 py-2">${student_name}</td>
+<td class="border border-green-700 px-4 py-2">${branch}</td>
+<td class="border border-green-700 px-4 py-2">${category}</td>
+<td class="border border-green-700 px-4 py-2">${seat_number || "N/A"}</td>
+<td class="border border-green-700 px-4 py-2">${state}</td>
+<td class="border border-green-700 px-4 py-2">
+<button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded" onclick="deleteAllocation('${id}', '${branch}', '${category}', '${state}')">
+Delete
+</button>
+</td>
+`;
+        allocatedSeatsBody.appendChild(tr);
+      });
+    }
+
+    async function loadAllocatedSeats() {
+      try {
+        const res = await fetch(ENDPOINTS.getAllocations);
+        if (!res.ok) throw new Error("Failed to fetch allocations");
+        allocationsData = await res.json();
+        renderAllocations(searchInput.value);
+      } catch (error) {
+        console.error("Error loading allocated seats:", error);
+        allocatedSeatsBody.innerHTML =
+          '<tr><td colspan="6" class="text-red-600 font-semibold py-4">Failed to load allocated seats data.</td></tr>';
+      }
+    }
+
+    // Allocate seat form submit handler
+    allocateForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      updateMessage.textContent = "";
+
+      const branch = branchSelect.value;
+      const state = stateSelect.value;
+      const category = categorySelect.value;
+      const studentName = studentNameInput.value.trim();
+      const seatNumberInput = document.getElementById("seat-number");
+      const seatNumber = seatNumberInput.value.trim();
+
+      if (!seatNumber) {
+        updateMessage.textContent = "Please enter seat number.";
+        return;
+      }
+
+      if (!branch || !category || !studentName || !state) {
+        updateMessage.textContent = "Please fill all fields.";
+        return;
+      }
+
+      // Disable form while processing
+      allocateForm.querySelector("button[type=submit]").disabled = true;
+
+      try {
+        // Send allocation request to server
+        const res = await fetch(ENDPOINTS.allocateSeat, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ branch, category, student_name: studentName, seat_number: seatNumber, state }),
+        });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.message || "Failed to allocate seat");
+        }
+
+        const data = await res.json();
+        console.log("Allocation response:", data);
+
+        if (data.success) {
+          updateMessage.classList.remove("text-red-600");
+          updateMessage.classList.add("text-green-600");
+          updateMessage.textContent = "Seat allocated successfully.";
+
+          // Set last allocation ID for PDF download
+          lastAllocationId = data.id;
+          console.log("Last allocation ID set to:", lastAllocationId);
+
+          // Show download button
+          downloadSlipBtn.classList.remove("hidden");
+
+          // Clear student name input and seat number input
+          studentNameInput.value = "";
+          seatNumberInput.value = "";
+
+          // Optionally reset selects
+          // branchSelect.value = "";
+          // categorySelect.value = "";
+          // stateSelect.value = "";
+
+          // Refresh seat availability data if user switches to view page
+        } else {
+          updateMessage.classList.remove("text-green-600");
+          updateMessage.classList.add("text-red-600");
+          updateMessage.textContent = data.message || "Allocation failed.";
+        }
+      } catch (error) {
+        updateMessage.classList.remove("text-green-600");
+        updateMessage.classList.add("text-red-600");
+        updateMessage.textContent = error.message;
+      } finally {
+        allocateForm.querySelector("button[type=submit]").disabled = false;
+      }
+    });
+
+    // Button click handlers
+    btnUpdate.addEventListener("click", () => {
+      updateMessage.textContent = "";
+      allocateForm.reset();
+      downloadSlipBtn.classList.add("hidden");
+      seatWarning.classList.add("hidden");
+      showPage(updatePage);
+    });
+
+    btnView.addEventListener("click", () => {
+      showPage(viewPage);
+      loadSeatAvailability();
+      loadAllocatedSeats();
+    });
+
+    btnExport.addEventListener("click", () => {
+      showPage(viewPage);
+      loadSeatAvailability();
+      loadAllocatedSeats();
+    });
+
+    updateBackBtn.addEventListener("click", () => {
+      showPage(mainPage);
+    });
+
+    viewBackBtn.addEventListener("click", () => {
+      showPage(mainPage);
+    });
+
+    // Search functionality
+    searchInput.addEventListener("input", (e) => {
+      renderAllocations(e.target.value);
+    });
+
+    // Export allocations
+    exportAllocationsBtn.addEventListener("click", async () => {
+      try {
+        const res = await fetch(ENDPOINTS.exportAllocations);
+        if (!res.ok) throw new Error("Failed to export allocations");
+
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "allocations.xlsx";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        alert("Failed to export allocations: " + error.message);
+      }
+    });
+
+    // Download PDF slip
+    // Download PDF slip - For HTML-based PDF generation
+downloadSlipBtn.addEventListener("click", async () => {
+    if (!lastAllocationId) {
+        alert("No allocation ID available. Please allocate a seat first.");
+        return;
+    }
+
+    console.log("Opening admission slip for ID:", lastAllocationId);
+    
+    // Simply open the page in a new tab/window
+    const url = `${ENDPOINTS.generateSlip}?id=${lastAllocationId}`;
+    window.open(url, '_blank');
+});
+
+    // Seat number validation
+    document.getElementById("seat-number").addEventListener("input", async (e) => {
+      const seatNumber = e.target.value.trim();
+      if (seatNumber === "") {
+        seatWarning.classList.add("hidden");
+        return;
+      }
+
+      try {
+        const res = await fetch(ENDPOINTS.getAllocations);
+        if (!res.ok) return;
+
+        const allocations = await res.json();
+        const exists = allocations.some(alloc => alloc.seat_number === seatNumber);
+
+        if (exists) {
+          seatWarning.classList.remove("hidden");
+        } else {
+          seatWarning.classList.add("hidden");
+        }
+      } catch (error) {
+        console.error("Error checking seat number:", error);
+      }
+    });
+
+    // Polling for view page to update data every 5 seconds
+    let viewPageInterval = null;
+    function startViewPagePolling() {
+      if (viewPageInterval) clearInterval(viewPageInterval);
+      viewPageInterval = setInterval(() => {
+        if (!viewPage.classList.contains("hidden")) {
+          loadSeatAvailability();
+          loadAllocatedSeats();
+        }
+      }, 5000);
+    }
+    startViewPagePolling();
+
+    // Initialize seats on page load
+    window.addEventListener("load", async () => {
+      await initializeSeatsIfNeeded();
+    });
+
+    // Delete allocation function with state parameter to update seats accordingly
+    async function deleteAllocation(id, branch, category, state) {
+      if (!confirm("Are you sure you want to delete this allocation?")) return;
+
+      try {
+        const res = await fetch(ENDPOINTS.deleteAllocation, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id, branch, category, state }),
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          alert("Student record deleted successfully.");
+          loadSeatAvailability();
+          loadAllocatedSeats();
+        } else {
+          alert("Failed to delete: " + (data.message || "Unknown error"));
+        }
+      } catch (err) {
+        alert("Error deleting record. Check internet or server.");
+        console.error(err);
+      }
+    }
+  </script>
+ </body>
+</html>
